@@ -3,7 +3,7 @@
 <section id="announce">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4"> <!-- Columna izquierda -->
                 <h3>Calculadora de préstamos</h3>
                 <p>Ingrese los datos y presione calcular para obtener los resultados.</p>
                 <form>
@@ -29,35 +29,32 @@
                 </form>
             </div><!-- col -->
 
-            <div class="col-md-8">
+            <div class="col-md-8"> <!-- Columna derecha -->
                 <div class="right-area">
                     <h3 class="alert alert-primary">Importe de la primer cuota</h3>
                     <form>
                         <div class="form-group row">
                             <label for="ResultadoCapital" class="col-sm-5 col-form-label">Cuota Capital + Intereses</label>
-                            <div class="col-sm-3 input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">$</div>
-                                </div>
+                            <div class="col-sm-3">
                                 <label type="text" class="col-form-label" id="ResultadoCapital"></label>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="Iva" class="col-sm-5 col-form-label">I.V.A</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="Iva" disabled>
+                                <label type="text" class="col-form-label" id="Iva"></label>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="ResultadoIva" class="col-sm-5 col-form-label">Cuota + I.V.A</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="ResultadoIva" disabled>
+                                <label type="text" class="col-form-label" id="ResultadoIva"></label>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="Ingresos" class="col-sm-5 col-form-label">Ingresos Necesarios</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="Ingresos" disabled>
+                                <label type="text" class="col-form-label" id="Ingresos"></label>
                             </div>
                         </div>
                     </form>
