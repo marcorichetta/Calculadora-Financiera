@@ -1,86 +1,106 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-    <section id="announce">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4"> <!-- Columna izquierda -->
-                    <h3>Solicitá tu préstamo</h3>
-                    <p>Ingresá los datos y presioná calcular para obtener los resultados.</p>
+    <div class="container pad">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Solicitá tu préstamo</h3>
+                <p>Ingresá los datos y presioná calcular para obtener los resultados.</p>
+                <form>
+                    <div class="form-group">
+                        <label for="capitalLabel">Capital</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">$</div>
+                            </div>
+                            <input type="number" class="form-control" id="capital" aria-describedby="capitalHelp" max="100000" min="5000"
+                            step="5000" placeholder="5000">
+                        </div>
+                        <small id="capitalHelp" class="form-text text-muted">Máximo $100000</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plazoLabel">Duración del préstamo</label>
+                        <input type="number" class="form-control" id="plazo" aria-describedby="plazoHelp" max="72" min="1" placeholder="12">
+                        <small id="plazoHelp" class="form-text text-muted">Máximo 72 meses</small>
+                    </div>
+
+                    <button onclick="calcular()" id="Calcular" type="button" class="btn btn-primary">Calcular</button>
+                </form>
+            </div><!-- Columna izquierda -->
+
+            <div class="col-md-8">
+                <div class="right-area">
+                    <h3 class="alert alert-primary">Importe de la primer cuota</h3>
                     <form>
-                        <div class="form-group">
-                            <label for="capitalLabel">Capital</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">$</div>
-                                </div>
-                                <input type="number" class="form-control" id="capital" aria-describedby="capitalHelp" max="100000" min="5000"
-                                step="5000" placeholder="5000">
+                        <div class="form-group row">
+                            <label for="ResultadoCapital" class="col-sm-5 col-form-label">Cuota Capital + Intereses</label>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label calculos" id="ResultadoCapital"></label>
                             </div>
-                            <small id="capitalHelp" class="form-text text-muted">Máximo $100000</small>
                         </div>
-
-                        <div class="form-group">
-                            <label for="plazoLabel">Duración del préstamo</label>
-                            <input type="number" class="form-control" id="plazo" aria-describedby="plazoHelp" max="72" min="1" placeholder="12">
-                            <small id="plazoHelp" class="form-text text-muted">Máximo 72 meses</small>
+                        <div class="form-group row">
+                            <label for="Iva" class="col-sm-5 col-form-label">I.V.A</label>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label calculos" id="Iva"></label>
+                            </div>
                         </div>
-
-                        <button onclick="calcular()" id="Calcular" type="button" class="btn btn-primary">Calcular</button>
+                        <br>
+                        <div class="form-group row">
+                            <label for="ResultadoIva" class="col-sm-5 col-form-label">Cuota + I.V.A</label>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label importante" id="ResultadoIva"></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Ingresos" class="col-sm-5 col-form-label">Ingresos Necesarios</label>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label importante" id="Ingresos"></label>
+                            </div>
+                        </div>
                     </form>
-                </div><!-- col -->
 
-                <div class="col-md-8"> <!-- Columna derecha -->
-                    <div class="right-area">
-                        <h3 class="alert alert-primary">Importe de la primer cuota</h3>
-                        <form>
-                            <div class="form-group row">
-                                <label for="ResultadoCapital" class="col-sm-5 col-form-label">Cuota Capital + Intereses</label>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label calculos" id="ResultadoCapital"></label>
-                                </div>
+                    <h3 class="alert alert-primary">Tasas</h3>
+                    <form>
+                        <div class="form-group row">
+                                <abbr class="col-sm-5 col-form-label" for="tna" title="Tasa Nominal Anual">TNA</abbr>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label" id="TNA"></label>
                             </div>
-                            <div class="form-group row">
-                                <label for="Iva" class="col-sm-5 col-form-label">I.V.A</label>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label calculos" id="Iva"></label>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                                <abbr class="col-sm-5 col-form-label" for="tem" title="Tasa Efectiva Mensual">TEM</abbr>
+                            <div class="col-sm-3">
+                                <label type="text" class="col-form-label" id="TEM"></label>
                             </div>
-                            <br>
-                            <div class="form-group row">
-                                <label for="ResultadoIva" class="col-sm-5 col-form-label">Cuota + I.V.A</label>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label importante" id="ResultadoIva"></label>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="Ingresos" class="col-sm-5 col-form-label">Ingresos Necesarios</label>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label importante" id="Ingresos"></label>
-                                </div>
-                            </div>
-                        </form>
-
-                        <h3 class="alert alert-primary">Tasas</h3>
-                        <form>
-                            <div class="form-group row">
-                                    <abbr class="col-sm-5 col-form-label" for="tna" title="Tasa Nominal Anual">TNA</abbr>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label" id="TNA"></label>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                    <abbr class="col-sm-5 col-form-label" for="tem" title="Tasa Efectiva Mensual">TEM</abbr>
-                                <div class="col-sm-3">
-                                    <label type="text" class="col-form-label" id="TEM"></label>
-                                </div>
-                            </div>
-                        </form>
-                    </div><!-- right-area -->
-                </div><!-- col -->
-
-            </div><!-- row -->
-        </div><!-- container -->
-    </section><!-- announce -->
+                        </div>
+                    </form>
+                </div><!-- right-area -->
+            </div><!-- Columna derecha -->
+        </div><!-- row -->
+        <div class="row pad">
+            <table id="tabla" class="table table-md table-hover">
+                <caption>Tabla de amortización</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Interés</th>
+                        <th scope="col">Amortización</th>
+                        <th scope="col">Cuota Fija</th>
+                        <th scope="col">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>$10000</td>
+                        <td>$10000</td>
+                        <td>$10000</td>
+                        <td>$10000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- Tabla -->
+    </div><!-- container -->
 </div>
 {% endblock %}

@@ -26,7 +26,6 @@ h3{
 	background-color: #fff!important;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-
 header{
 	height: 500px;
 	background-color: rgba(0,0,0,0.3);
@@ -40,7 +39,7 @@ header{
 	font-weight: 800;
 	font-size: 70px;
 }
-#announce{
+.pad{
 	padding:40px 0px;
 }
 .right-area{
