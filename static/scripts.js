@@ -11,25 +11,50 @@ function calcular() {
     }
 
     let cuotaFija = obtenerCuotaFija(capitalInicial, plazoMensual);
-    let iva = (cuotaFija * 21)/100;
-    let sumaTotal = cuotaFija + iva;
-    let ingresosNecesarios = sumaTotal * 3.33;
+//    let iva = (cuotaFija * 21)/100;
+//    let sumaTotal = cuotaFija + iva;
+    let ingresosNecesarios = cuotaFija * 3.33;
 
     let tasaNominal = obtenerTasa(plazoMensual) * 100;
 
     let tasaEfectiva = tasaNominal / plazoMensual;
 
     document.getElementById("ResultadoCapital").innerText = '$ ' + cuotaFija.toFixed(2);
-    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);
-    document.getElementById("ResultadoIva").innerText = '$ ' + sumaTotal.toFixed(2);
+//    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);
+//    document.getElementById("ResultadoIva").innerText = '$ ' + sumaTotal.toFixed(2);
     document.getElementById("Ingresos").innerText = '$ ' + ingresosNecesarios.toFixed(2);
 
     document.getElementById("TNA").innerText = tasaNominal.toFixed(2) + ' %';
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
+
+    /**
+     * Un array compuesto por [n] arrays con la información de cada cuota.
+     */
+    let registros = obtenerAmortizacion(cuotaFija.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
+
+    let tableBody = document.getElementById("cuerpoTabla");
+
+    // Llenamos la tabla con los registros calculados
+    for (let i = 0; i < registros.length; i++) {
+        const registro = registros[i];
+        fila = document.createElement("tr");
+        for (let k = 0; k < registro.length; k++) {
+            let valor = registro[k];
+            
+            if (k > 0){ // Excluímos el número de cuota
+                valor = '$' + valor
+            }
+            td = document.createElement("td");
+            celda = document.createTextNode(valor);
+            td.appendChild(celda);
+            fila.appendChild(td);
+        }
+        tableBody.appendChild(fila);
+    }
 }
+
 /**
- * Uso una función para obtener las tasas.
- * Debería usar una para fijar este valor también.
+ * Según el plazo varía la tasa obtenida.
  */
 function obtenerTasa(plazo) {
     /**
@@ -49,7 +74,7 @@ function obtenerTasa(plazo) {
 }
 
 /**
- * Tomo el capital y el plazo ingresados para calcular la cuota fija
+ * Tomo el capital y el plazo ingresados para calcular la cuota fija.
  * */ 
 function obtenerCuotaFija(monto, plazo) {
 
@@ -76,11 +101,18 @@ function obtenerCuotaFija(monto, plazo) {
     return cuota;
 }
 
+/**
+ * Obtengo un array con n arrays con los datos de cada cuota a pagar según sistema Francés.
+ * @param cuotaFija Cuota calculada en función obtenerCuotaFija()
+ * @param plazo Determina cantidad de registros
+ * @param monto Saldo inicial
+ * @param tasa Tasa calculada en la función obtenerTasa()
+ */
 function obtenerAmortizacion(cuotaFija, plazo, monto, tasa) {
     let items = [];
     
     for (let i = 1; i <= plazo; i++) {
-        let interes = monto * tasa;
+        let interes = monto * (tasa / 100);
         let amortizacion = cuotaFija - interes;
         monto -= amortizacion;
 

@@ -31,7 +31,7 @@
 
             <div class="col-md-8">
                 <div class="right-area">
-                    <h3 class="alert alert-primary">Importe de la primer cuota</h3>
+                    <h3 class="alert alert-primary">Importe de la cuota</h3>
                     <form>
                         <div class="form-group row">
                             <label for="ResultadoCapital" class="col-sm-5 col-form-label">Cuota Capital + Intereses</label>
@@ -39,6 +39,7 @@
                                 <label type="text" class="col-form-label calculos" id="ResultadoCapital"></label>
                             </div>
                         </div>
+                        <!-- En el caso de que se usara IVA habilitaremos estos campos para los scripts.
                         <div class="form-group row">
                             <label for="Iva" class="col-sm-5 col-form-label">I.V.A</label>
                             <div class="col-sm-3">
@@ -52,6 +53,7 @@
                                 <label type="text" class="col-form-label importante" id="ResultadoIva"></label>
                             </div>
                         </div>
+                        -->
                         <div class="form-group row">
                             <label for="Ingresos" class="col-sm-5 col-form-label">Ingresos Necesarios</label>
                             <div class="col-sm-3">
@@ -79,25 +81,18 @@
             </div><!-- Columna derecha -->
         </div><!-- row -->
         <div class="row pad">
-            <table id="tabla" class="table table-md table-hover">
+            <table id="tablaAmortizacion" class="table table-hover table-striped">
                 <caption>Tabla de amortización</caption>
                 <thead>
-                    <tr>
+                    <tr class="table-primary">
                         <th scope="col">#</th>
                         <th scope="col">Interés</th>
                         <th scope="col">Amortización</th>
-                        <th scope="col">Cuota Fija</th>
+                        <th scope="col">Cuota</th>
                         <th scope="col">Saldo</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>$10000</td>
-                        <td>$10000</td>
-                        <td>$10000</td>
-                        <td>$10000</td>
-                    </tr>
+                <tbody id="cuerpoTabla">
                 </tbody>
             </table>
         </div><!-- Tabla -->
