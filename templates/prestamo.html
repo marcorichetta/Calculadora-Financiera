@@ -25,6 +25,14 @@
                         <small id="plazoHelp" class="form-text text-muted">Máximo 72 meses</small>
                     </div>
 
+                    <div class="form-group">
+                        <label for="sistemaLabel">Sistema de amortización</label>
+                        <select class="form-control" id="sistema">
+                          <option value="1">Francés</option>
+                          <option value="2">Alemán</option>
+                        </select>
+                      </div>
+
                     <button onclick="calcular()" id="Calcular" type="button" class="btn btn-primary">Calcular</button>
                 </form>
             </div><!-- Columna izquierda -->
@@ -82,7 +90,7 @@
         </div><!-- row -->
         <div class="row pad">
             <table id="tablaAmortizacion" class="table table-hover table-striped">
-                <caption>Tabla de amortización</caption>
+                <caption id="descripcion">Tabla de amortización</caption>
                 <thead>
                     <tr class="table-primary">
                         <th scope="col">#</th>

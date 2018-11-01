@@ -1,6 +1,7 @@
 function calcular() {
     let capitalInicial = document.getElementById("capital").value;
     let plazoMensual = document.getElementById("plazo").value;
+    let sistemaAmort = document.getElementById("sistema").value;
 
     if (capitalInicial > 100000) {
         alert("El capital inicial debe ser menor a $100000");
@@ -10,16 +11,16 @@ function calcular() {
         alert("El plazo debe ser menor a 72 meses");
     }
 
-    let cuotaFija = obtenerCuotaFija(capitalInicial, plazoMensual);
-//    let iva = (cuotaFija * 21)/100;
-//    let sumaTotal = cuotaFija + iva;
-    let ingresosNecesarios = cuotaFija * 3.33;
+    let cuota = obtenerCuota(capitalInicial, plazoMensual);
+//    let iva = (cuota * 21)/100;
+//    let sumaTotal = cuota + iva;
+    let ingresosNecesarios = cuota * 3.33;
 
     let tasaNominal = obtenerTasa(plazoMensual) * 100;
 
     let tasaEfectiva = tasaNominal / plazoMensual;
 
-    document.getElementById("ResultadoCapital").innerText = '$ ' + cuotaFija.toFixed(2);
+    document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
 //    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);
 //    document.getElementById("ResultadoIva").innerText = '$ ' + sumaTotal.toFixed(2);
     document.getElementById("Ingresos").innerText = '$ ' + ingresosNecesarios.toFixed(2);
@@ -28,11 +29,19 @@ function calcular() {
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
 
     /**
-     * Un array compuesto por [n] arrays con la información de cada cuota.
-     */
-    let registros = obtenerAmortizacion(cuotaFija.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
+    * Un array compuesto por [n] arrays con la información de cada cuota.
+    */
+    let registros;
+
+    if (sistemaAmort == 1){ // Sistema Francés
+        registros = obtenerAmortizacion(cuota.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
+    } else 
+    if (sistemaAmort == 2){ // Sistema Alemán
+        registros = amortAleman(plazoMensual, capitalInicial, tasaEfectiva);
+    }
 
     let tableBody = document.getElementById("cuerpoTabla");
+    tableBody.innerHTML = "";
 
     // Llenamos la tabla con los registros calculados
     for (let i = 0; i < registros.length; i++) {
@@ -74,9 +83,9 @@ function obtenerTasa(plazo) {
 }
 
 /**
- * Tomo el capital y el plazo ingresados para calcular la cuota fija.
+ * Tomo el capital y el plazo ingresados para calcular la cuota.
  * */ 
-function obtenerCuotaFija(monto, plazo) {
+function obtenerCuota(monto, plazo) {
 
     let tasaNominal = obtenerTasa();
 
@@ -124,6 +133,37 @@ function obtenerAmortizacion(cuotaFija, plazo, monto, tasa) {
 
         items.push(item);
     }
+    
+    // Actualizamos caption de la tabla.
+    document.getElementById("descripcion").innerText = 'Sistema Francés'
+    return items;
+}
 
+/**
+ * Obtengo un array con n arrays con los datos de cada cuota a pagar según sistema Alemán.
+ * @param plazo Determina cantidad de registros
+ * @param monto Saldo inicial
+ * @param tasa Tasa calculada en la función obtenerTasa()
+ */
+function amortAleman(plazo, monto, tasa) {
+    let items = [];
+    let amortizacionFija = monto / plazo;
+    
+    for (let i = 1; i <= plazo; i++) {
+        let interes = monto * (tasa/100);
+        let cuota = amortizacionFija + interes;
+        monto -= amortizacionFija;
+
+        interes = interes.toFixed(2);
+        cuota = cuota.toFixed(2);
+        monto = monto.toFixed(2);
+
+        item = [i, interes, amortizacionFija.toFixed(2), cuota, monto];
+
+        items.push(item);
+    }
+ 
+    // Actualizamos caption de la tabla.
+    document.getElementById("descripcion").innerText = 'Sistema Alemán'
     return items;
 }
