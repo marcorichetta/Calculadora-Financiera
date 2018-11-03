@@ -11,16 +11,33 @@ function calcular() {
         alert("El plazo debe ser menor a 72 meses");
     }
 
-    let cuota = obtenerCuota(capitalInicial, plazoMensual);
+    /**
+    * Un array compuesto por [n] arrays con la información de cada cuota.
+    */
+    let registros;
+    let cuota;
+
+    let tasaNominal = obtenerTasaNominal(plazoMensual) * 100;
+
+    let tasaEfectiva = tasaNominal / 12;
+    
+    if (sistemaAmort == 1){ // Sistema Francés
+        cuota = obtenerCuotaFija(capitalInicial, plazoMensual);
+        registros = amortFrances(cuota.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
+        document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
+        console.log(cuota);
+    } else 
+    if (sistemaAmort == 2){ // Sistema Alemán
+        registros = amortAleman(plazoMensual, capitalInicial, tasaEfectiva);
+        cuota = registros[0][3];
+        document.getElementById("ResultadoCapital").innerText = '$ ' + cuota;
+    }
+
 //    let iva = (cuota * 21)/100;
 //    let sumaTotal = cuota + iva;
-    let ingresosNecesarios = cuota * 3.33;
+    let ingresosNecesarios = cuota * 6.66;
 
-    let tasaNominal = obtenerTasa(plazoMensual) * 100;
-
-    let tasaEfectiva = tasaNominal / plazoMensual;
-
-    document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
+//    document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
 //    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);
 //    document.getElementById("ResultadoIva").innerText = '$ ' + sumaTotal.toFixed(2);
     document.getElementById("Ingresos").innerText = '$ ' + ingresosNecesarios.toFixed(2);
@@ -28,17 +45,6 @@ function calcular() {
     document.getElementById("TNA").innerText = tasaNominal.toFixed(2) + ' %';
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
 
-    /**
-    * Un array compuesto por [n] arrays con la información de cada cuota.
-    */
-    let registros;
-
-    if (sistemaAmort == 1){ // Sistema Francés
-        registros = obtenerAmortizacion(cuota.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
-    } else 
-    if (sistemaAmort == 2){ // Sistema Alemán
-        registros = amortAleman(plazoMensual, capitalInicial, tasaEfectiva);
-    }
 
     let tableBody = document.getElementById("cuerpoTabla");
     tableBody.innerHTML = "";
@@ -65,7 +71,7 @@ function calcular() {
 /**
  * Según el plazo varía la tasa obtenida.
  */
-function obtenerTasa(plazo) {
+function obtenerTasaNominal(plazo) {
     /**
      * TNA: La tasa nominal anual (TNA) es el interés que nos pagan de manera
      * anual (por un período de 12 meses) al colocar nuestro dinero en algún 
@@ -83,17 +89,17 @@ function obtenerTasa(plazo) {
 }
 
 /**
- * Tomo el capital y el plazo ingresados para calcular la cuota.
+ * Tomo el capital y el plazo ingresados para calcular la cuota utilizada en el sistema francés.
  * */ 
-function obtenerCuota(monto, plazo) {
+function obtenerCuotaFija(monto, plazo) {
 
-    let tasaNominal = obtenerTasa();
+    let tasaNominal = obtenerTasaNominal(plazo);
 
     /**
      * TEA: La tasa efectiva anual (TEA) estipula la reinversión de los 
      * intereses ganados al renovar en este caso un Plazo Fijo.
      */
-    let tasaEfectiva = tasaNominal / plazo;
+    let tasaEfectiva = tasaNominal / 12;
 
     /**
      * Guarda el resultado de (1+i)^n siendo n el plazo
@@ -115,9 +121,9 @@ function obtenerCuota(monto, plazo) {
  * @param cuotaFija Cuota calculada en función obtenerCuotaFija()
  * @param plazo Determina cantidad de registros
  * @param monto Saldo inicial
- * @param tasa Tasa calculada en la función obtenerTasa()
+ * @param tasa Tasa calculada en la función obtenerTasaNominal()
  */
-function obtenerAmortizacion(cuotaFija, plazo, monto, tasa) {
+function amortFrances(cuotaFija, plazo, monto, tasa) {
     let items = [];
     
     for (let i = 1; i <= plazo; i++) {
@@ -143,7 +149,7 @@ function obtenerAmortizacion(cuotaFija, plazo, monto, tasa) {
  * Obtengo un array con n arrays con los datos de cada cuota a pagar según sistema Alemán.
  * @param plazo Determina cantidad de registros
  * @param monto Saldo inicial
- * @param tasa Tasa calculada en la función obtenerTasa()
+ * @param tasa Tasa calculada en la función obtenerTasaNominal()
  */
 function amortAleman(plazo, monto, tasa) {
     let items = [];
