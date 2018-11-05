@@ -1,14 +1,16 @@
-function calcular() {
+function calcularAmort() {
     let capitalInicial = document.getElementById("capital").value;
     let plazoMensual = document.getElementById("plazo").value;
     let sistemaAmort = document.getElementById("sistema").value;
 
     if (capitalInicial > 100000) {
         alert("El capital inicial debe ser menor a $100000");
+        throw new Error("El capital inicial debe ser menor a $100000");
     }
 
     if (plazoMensual > 72){
         alert("El plazo debe ser menor a 72 meses");
+        throw new Error("El plazo debe ser menor a 72 meses");
     }
 
     /**
@@ -25,23 +27,33 @@ function calcular() {
         cuota = obtenerCuotaFija(capitalInicial, plazoMensual);
         registros = amortFrances(cuota.toFixed(2), plazoMensual, capitalInicial, tasaEfectiva);
         document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
-        console.log(cuota);
     } else 
     if (sistemaAmort == 2){ // Sistema Alemán
         registros = amortAleman(plazoMensual, capitalInicial, tasaEfectiva);
-        cuota = registros[0][3];
+        cuota = registros[0][3]; // Saco la cuota del primer registro. (Risky)
         document.getElementById("ResultadoCapital").innerText = '$ ' + cuota;
     }
 
 //    let iva = (cuota * 21)/100;
 //    let sumaTotal = cuota + iva;
     let ingresosNecesarios = cuota * 6.66;
+    
+    // Calculo la fecha actual y le sumo un mes para el próximo pago.
+    let fechaPago = new Date();
+    // Workaround para fin de año.
+    let mes = fechaPago.getMonth()
+    if (mes == 11){
+        mes = 1;
+    } else {
+        mes += 1;
+    }
+    fechaPago.setMonth(mes);
 
+    document.getElementById("Fecha").innerText = fechaPago.toLocaleDateString();
 //    document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
 //    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);
 //    document.getElementById("ResultadoIva").innerText = '$ ' + sumaTotal.toFixed(2);
     document.getElementById("Ingresos").innerText = '$ ' + ingresosNecesarios.toFixed(2);
-
     document.getElementById("TNA").innerText = tasaNominal.toFixed(2) + ' %';
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
 
