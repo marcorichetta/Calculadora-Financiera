@@ -12,10 +12,20 @@ function calcularPlazo() {
         throw new Error("El plazo debe ser menor a 72 meses");
     }
 
-    let tasas = {30: 0.48, 45: 0.47, 60: 0.45};
-    
-    let capitalFinal = capitalInicial * (1 + tasas[30] * (plazo/365));
+    let tasaAnual;
+
+    if (plazo < 45) {
+        tasaAnual = 0.48;
+    } else if (plazo < 60) {
+        tasaAnual = 0.47        
+    } else {
+        tasaAnual = 0.45
+    }
+
+    let capitalFinal = capitalInicial * (1 + tasaAnual * (plazo/365));
     let intereses = capitalFinal - capitalInicial;
 
-    console.log(capitalFinal, intereses);
+    document.getElementById("Intereses").innerText = '$ ' + intereses.toFixed(2);
+    document.getElementById("Resultado").innerText = '$ ' + capitalFinal.toFixed(2);
+    document.getElementById("TNA").innerText = tasaAnual*100 + ' %';
 }
