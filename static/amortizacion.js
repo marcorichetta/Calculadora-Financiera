@@ -3,6 +3,10 @@ function calcularAmort() {
     let plazoMensual = document.getElementById("plazo").value;
     let sistemaAmort = document.getElementById("sistema").value;
 
+    if (!capitalInicial || !plazoMensual) {
+        alert("Por favor ingrese los datos solicitados.");
+        throw new Error("")
+    }
     if (capitalInicial > 100000) {
         alert("El capital inicial debe ser menor a $100000");
         throw new Error("El capital inicial debe ser menor a $100000");

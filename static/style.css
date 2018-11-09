@@ -3,7 +3,7 @@
     src: url('OpenSans-Regular-webfont.woff') format('woff');
     font-weight: normal;
 	font-style: normal;
-	font-display: fallback;
+	font-display: auto;
 } /* Custom Font Link */
 body{
 	margin:0;
