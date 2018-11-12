@@ -3,31 +3,43 @@
 <div class="container pad">
     <h3>Usted va a depositar $ {{valor[0]}} por {{valor[1]}} días a una tasa del {{valor[2]}}%</h3>
     <p>Para finalizar la solicitud ingrese los datos del cliente.</p>
-    <form action="/solicitud" method="post">
-        <div class="form-row">
-            <div class="col-md-3 mb-3">
+    <form action="/solicitud" method="post" class="centrado">
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
                 <label for="nombre">Nombre</label>
-                <input type="text" class="form-control" id="nombre" placeholder="Juan" required>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="apellido">Apellido</label>
-                <input type="text" class="form-control" id="apellido" placeholder="Perez" required>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Juan" required>
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-3 mb-3">
-                <label for="validationDefault03">City</label>
-                <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Perez" required>
             </div>
-            <div class="col-md-3 mb-3">
-            <label for="validationDefault04">State</label>
-            <input type="text" class="form-control" id="validationDefault04" placeholder="State" required>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="direccion">Localidad</label>
+                <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Localidad" required>
             </div>
-            <div class="col-md-3 mb-3">
-                <label for="validationDefault05">Zip</label>
-                <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="telefono">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="0353 1 234 567" required>
             </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="juanperez@hotmail.com" required>
             </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <button type="submit" id="enviarPlazo" class="btn btn-success">✔︎ Solicitar</button>
+                <button type="reset" id="goBack" class="btn btn-secondary">← Atrás</button>
+            </div>
+        </div>
     </form>
 </div>
 {% endblock %}

@@ -27,6 +27,17 @@ h3{
 	background-color: #fff!important;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+.centrado {
+	margin: auto;
+	max-width: 600px;
+	width: 100%;
+	border: lightskyblue double 2px;
+	border-radius: 0.5rem;
+}
+.centrado-form {
+	text-align: center;
+	padding: 10px 0px;
+}
 header{
 	height: 500px;
 	background-color: rgba(0,0,0,0.3);

@@ -17,21 +17,35 @@ def plazo():
 def prestamo():
     return render_template("prestamo.html")
 
-@app.route("/solicitud", methods=['POST'])
+@app.route("/solicitud", methods=['GET', 'POST'])
 def solicitud():
-    capital = request.form.get("capital")
-    plazo = int(request.form.get("plazo"))
-    
-    if (plazo < 45):
-        tasa = 48
-    elif (plazo < 60):
-        tasa = 47
-    else:
-        tasa = 45
-        
-    valor = [capital, plazo, tasa]
 
-    return render_template("solicitud.html", valor=valor)
+    if request.method == "POST":
+        nombre = request.form.get("nombre")
+        apellido = request.form.get("apellido")
+        localidad = request.form.get("localidad")
+        telefono = request.form.get("telefono")
+        email = request.form.get("email")
+
+        # Data to be sent to database.
+        userData = [nombre,apellido,localidad, telefono, email]
+        print(userData)
+        flash('Plazo fijo!')
+        return render_template("index.html")
+    else:
+        capital = request.args.get("capital")
+        plazo = int(request.args.get("plazo"))
+        
+        if (plazo < 45):
+            tasa = 48
+        elif (plazo < 60):
+            tasa = 47
+        else:
+            tasa = 45
+            
+        valor = [capital, plazo, tasa]
+
+        return render_template("solicitud.html", valor=valor)
 
 @app.route("/obtenerTasa")
 def obtenerTasa():
