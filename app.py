@@ -1,7 +1,9 @@
-from cs50 import sql
+from cs50 import SQL
 from flask import Flask, flash, render_template, request, jsonify
 
 app = Flask(__name__)
+
+db = SQL("sqlite:///prueba.db")
 
 @app.route("/")
 def index():
@@ -30,7 +32,12 @@ def solicitud():
         # Data to be sent to database.
         userData = [nombre,apellido,localidad, telefono, email]
         print(userData)
-        flash('Plazo fijo!')
+        db.execute("INSERT INTO usuarios (usuario, telefono, domicilio, sueldo) VALUES (:usuario, :telefono, :domicilio, :sueldo)",
+                    usuario=nombre,
+                    telefono=telefono,
+                    domicilio=localidad,
+                    sueldo=45000)
+
         return render_template("index.html")
     else:
         capital = request.args.get("capital")
