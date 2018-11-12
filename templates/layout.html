@@ -35,6 +35,12 @@
 				</div>
 			</div>
 	</nav>
+	{% if get_flashed_messages() %}
+			<div class="alert alert-success border text-center" role="alert">
+				{{ get_flashed_messages() | join(" ") }}
+			</div>
+	{% endif %}
+
         {% block content %}
         {% endblock %}
 </body>
