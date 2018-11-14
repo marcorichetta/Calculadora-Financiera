@@ -43,8 +43,12 @@ function calcularAmort() {
     let ingresosNecesarios = cuota * 6.66;
     
     // Calculo la fecha actual y le sumo un mes para el próximo pago.
-    let fechaPago = new Date();
-    // Workaround para fin de año.
+    let fechaActual = new Date();
+    let tempVariable = fechaActual.getTime() + 2629800000;
+
+    let fechaPago = new Date(tempVariable);
+
+    /* Workaround para fin de año.
     let mes = fechaPago.getMonth()
     if (mes == 11){
         mes = 1;
@@ -52,7 +56,7 @@ function calcularAmort() {
         mes += 1;
     }
     fechaPago.setMonth(mes);
-
+*/
     document.getElementById("Fecha").innerText = fechaPago.toLocaleDateString();
 //    document.getElementById("ResultadoCapital").innerText = '$ ' + cuota.toFixed(2);
 //    document.getElementById("Iva").innerText = '$ ' + iva.toFixed(2);

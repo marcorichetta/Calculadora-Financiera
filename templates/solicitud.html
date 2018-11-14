@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container pad">
-    <h3>Usted va a depositar $ {{valor[0]}} por {{valor[1]}} días a una tasa del {{valor[2]}}%</h3>
+    <h3>Usted va a depositar $ {{valor[0]}} por {{valor[1]}} días a una tasa nominal anual del {{valor[2]}}%</h3>
     <p>Para finalizar la solicitud ingrese los datos del cliente.</p>
-    <form action="/solicitud" method="post" class="centrado">
+    <form action="/solicitud" method="POST" class="centrado">
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
                 <label for="nombre">Nombre</label>
@@ -37,7 +37,7 @@
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
                 <button type="submit" id="enviarPlazo" class="btn btn-success">✔︎ Solicitar</button>
-                <button type="reset" id="goBack" class="btn btn-secondary">← Atrás</button>
+                <input action="action" onclick="window.history.go(-1); return false;" type="button" value="← Atrás" class="btn btn-secondary"></input>
             </div>
         </div>
     </form>

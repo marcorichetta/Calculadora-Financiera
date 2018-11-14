@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, render_template, request, jsonify, redirect
+from flask import Flask, flash, render_template, request, jsonify, redirect, session, escape
 
 app = Flask(__name__)
 
@@ -33,7 +33,10 @@ def solicitud():
 
         # Data to be sent to database.
         userData = [nombre,apellido,localidad, telefono, email]
-        print(userData)
+        
+        # Accedo al valor del plazo fijo con session
+        # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
+        print(userData, session['valor'])
 
         flash('El plazo fijo fue depositado con éxito')
         
@@ -60,7 +63,11 @@ def solicitud():
             
         valor = [capital, plazo, tasa]
 
+        session['valor'] = valor
+
         return render_template("solicitud.html", valor=valor)
+
+    
 
 @app.route("/obtenerTasa")
 def obtenerTasa():

@@ -23,7 +23,7 @@
                     <small id="plazoHelp" class="form-text text-muted">Máximo 365 días</small>
                 </div>
                 <button onclick="calcularPlazo()" id="Calcular" type="button" class="btn btn-primary">Calcular</button>
-                <button type="submit" id="solicitudPlazo" class="btn btn-secondary">Solicitar</button>
+                <button type="submit" id="solicitudPlazo" class="btn btn-success">Solicitar</button>
             </form>
         </div><!-- Columna Izquierda -->
         <div class="col-md-8">
@@ -37,13 +37,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                            <label for="Resultado" class="col-sm-5 col-form-label">Capital + Intereses</label>
-                            <div class="col-sm-3">
-                                <label type="text" class="col-form-label" id="Resultado"></label>
-                            </div>
+                        <label for="Resultado" class="col-sm-5 col-form-label">Capital + Intereses</label>
+                        <div class="col-sm-3">
+                            <label type="text" class="col-form-label" id="Resultado"></label>
                         </div>
+                    </div>
                     <div class="form-group row">
-                            <abbr class="col-sm-5 col-form-label" for="tna" title="Tasa Nominal Anual">TNA</abbr>
+                        <label for="Vencimiento" class="col-sm-5 col-form-label">Fecha de Vencimiento</label>
+                        <div class="col-sm-3">
+                            <label type="text" class="col-form-label" id="Vencimiento"></label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <abbr class="col-sm-5 col-form-label" for="tna" title="Tasa Nominal Anual">TNA</abbr>
                         <div class="col-sm-3">
                             <label type="text" class="col-form-label" id="TNA"></label>
                         </div>

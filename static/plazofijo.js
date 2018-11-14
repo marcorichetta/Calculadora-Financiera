@@ -40,7 +40,14 @@ function calcularPlazo() {
     let capitalFinal = capitalInicial * (1 + tasaAnual * (plazo/365));
     let intereses = capitalFinal - capitalInicial;
 
+    let fechaActual = new Date();
+    let milliseconds = plazo * 86400000;
+    let tempVariable = fechaActual.getTime() + milliseconds;
+
+    let fechaVencimiento = new Date(tempVariable);
+
     document.getElementById("Intereses").innerText = '$ ' + intereses.toFixed(2);
     document.getElementById("Resultado").innerText = '$ ' + capitalFinal.toFixed(2);
+    document.getElementById("Vencimiento").innerText = fechaVencimiento.toLocaleDateString();
     document.getElementById("TNA").innerText = tasaAnual*100 + ' %';
 }
