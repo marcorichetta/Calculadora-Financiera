@@ -8,6 +8,7 @@
     <label for="asddd">Existe?</label>
     <br>
     <label for="asd" id="existe"></label>
+    <input type="text" id="nombre">
 </div>
 <script type="text/javascript">
     function consultaUsuario() {
@@ -21,8 +22,14 @@
             dni: dni
         }
         }) 
-        .done(function(respuesta) {
-        document.getElementById("existe").innerText = respuesta;
+        .done(function(usuario) {
+            if (usuario == 'no') {
+                alert('El usuario no está registrado. Por favor ingrese los datos.');                
+            } else {
+                document.getElementById('nombre').value = usuario[0]['nombre']
+                console.log(usuario);
+            }
+
         });
     }
 </script>

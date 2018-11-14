@@ -6,6 +6,13 @@
     <form action="/solicitud" method="POST" class="centrado">
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
+                <label for="dni">DNI</label>
+                <input type="text" class="form-control" id="dni" name="dni" placeholder="Juan" required>
+                <button type="button" class="btn btn-primary" onclick="consultaUsuario()">Consultar</button>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
                 <label for="nombre">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Juan" required>
             </div>
@@ -42,4 +49,30 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    function consultaUsuario() {
+        let dni = document.getElementById("dni").value
+        
+        $.ajax({
+        url: "/consultaUser",
+        method: "GET",
+        async: false,
+        data: {
+            dni: dni
+        }
+        }) 
+        .done(function(usuario) {
+            if (usuario == 'no') {
+                alert('El usuario no está registrado. Por favor ingrese los datos.');                
+            } else {
+                document.getElementById('nombre').value = usuario[0]['nombre']
+                document.getElementById('apellido').value = usuario[0]['apellido']
+                document.getElementById('localidad').value = usuario[0]['localidad']
+                document.getElementById('telefono').value = usuario[0]['telefono']
+                document.getElementById('email').value = usuario[0]['email']
+            }
+
+        });
+    }
+</script>
 {% endblock %}

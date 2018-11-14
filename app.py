@@ -25,24 +25,36 @@ def prestamo():
 def solicitud():
 
     if request.method == "POST":
+        dni = request.form.get("dni")
         nombre = request.form.get("nombre")
         apellido = request.form.get("apellido")
         localidad = request.form.get("localidad")
         telefono = request.form.get("telefono")
         email = request.form.get("email")
-
-        # Data to be sent to database.
-        userData = [nombre,apellido,localidad, telefono, email]
         
         # Accedo al valor del plazo fijo con session
         # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
-        print(userData, session['valor'])
+        print(session['valor'])
 
-        db.execute("INSERT INTO usuarios (usuario, telefono, domicilio, sueldo) VALUES (:usuario, :telefono, :domicilio, :sueldo)",
-                    usuario=nombre,
+        capital = session['valor'][0]
+        plazo = session['valor'][1]
+        tasa = session['valor'][2]
+
+        db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
+                    dni=dni,
+                    nombre=nombre,
+                    apellido=apellido,
+                    localidad=localidad,
                     telefono=telefono,
-                    domicilio=localidad,
-                    sueldo=45000)
+                    email=email)
+
+        db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) VALUES (:dni, :capital, :plazo, :tasa)",
+                                        dni=dni,
+                                        capital=capital,
+                                        plazo=plazo,
+                                        tasa=tasa)
+        
+        session.pop['valor', None]
 
         flash('El plazo fijo fue depositado con éxito')        
 
@@ -95,10 +107,11 @@ def consultaUser():
     dni = request.args.get("dni")
     print(dni)
 
-    usuario = db.execute("SELECT * FROM usuarios WHERE dni = :dni",
+    usuario = db.execute("SELECT * FROM clientes WHERE dni = :dni",
                         dni = dni)
 
-    if len(usuario) != 0:
-        return 'SI'
+    if len(usuario) == 0:
+        return 'no'
     else:
-        return 'NO'
+        return jsonify(usuario)
+        #return jsonify(usuario)
