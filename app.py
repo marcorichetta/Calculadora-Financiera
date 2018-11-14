@@ -38,13 +38,13 @@ def solicitud():
         # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
         print(userData, session['valor'])
 
-        flash('El plazo fijo fue depositado con éxito')
-        
         db.execute("INSERT INTO usuarios (usuario, telefono, domicilio, sueldo) VALUES (:usuario, :telefono, :domicilio, :sueldo)",
                     usuario=nombre,
                     telefono=telefono,
                     domicilio=localidad,
                     sueldo=45000)
+
+        flash('El plazo fijo fue depositado con éxito')        
 
         return redirect("/")
     else:
@@ -83,3 +83,22 @@ def obtenerTasa():
         tasa = 45
 
     return jsonify(tasa)
+
+@app.route("/test")
+def test():
+    return render_template("test.html")
+
+@app.route("/consultaUser")
+def consultaUser():
+
+    # Consulta ajax para verificar existencia del usuario
+    dni = request.args.get("dni")
+    print(dni)
+
+    usuario = db.execute("SELECT * FROM usuarios WHERE dni = :dni",
+                        dni = dni)
+
+    if len(usuario) != 0:
+        return 'SI'
+    else:
+        return 'NO'
