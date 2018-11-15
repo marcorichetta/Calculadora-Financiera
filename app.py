@@ -34,13 +34,23 @@ def solicitud():
         
         # Accedo al valor del plazo fijo con session
         # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
-        print(session['valor'])
-
         capital = session['valor'][0]
         plazo = session['valor'][1]
         tasa = session['valor'][2]
 
-        db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
+        # Tabla plazos tiene id autoincremental
+        db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) VALUES (:dni, :capital, :plazo, :tasa)",
+                                dni=dni,
+                                capital=capital,
+                                plazo=plazo,
+                                tasa=tasa)
+
+        print(session)
+        # Check para no agregar dos usuarios iguales 
+        if not('existe' in session):
+            print('NO EXISTE!')
+            # Inserto los datos del cliente
+            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
                     dni=dni,
                     nombre=nombre,
                     apellido=apellido,
@@ -48,13 +58,9 @@ def solicitud():
                     telefono=telefono,
                     email=email)
 
-        db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) VALUES (:dni, :capital, :plazo, :tasa)",
-                                        dni=dni,
-                                        capital=capital,
-                                        plazo=plazo,
-                                        tasa=tasa)
-        
-        session.pop['valor', None]
+        # Sacamos los valores para el próximo cliente
+        session.pop('valor', None)
+        session.pop('existe', None)
 
         flash('El plazo fijo fue depositado con éxito')        
 
@@ -96,22 +102,18 @@ def obtenerTasa():
 
     return jsonify(tasa)
 
-@app.route("/test")
-def test():
-    return render_template("test.html")
-
 @app.route("/consultaUser")
 def consultaUser():
 
     # Consulta ajax para verificar existencia del usuario
     dni = request.args.get("dni")
-    print(dni)
 
+    # Guardo la row del usuario
     usuario = db.execute("SELECT * FROM clientes WHERE dni = :dni",
                         dni = dni)
 
     if len(usuario) == 0:
         return 'no'
     else:
+        session['existe'] = 1
         return jsonify(usuario)
-        #return jsonify(usuario)

@@ -53,6 +53,11 @@
     function consultaUsuario() {
         let dni = document.getElementById("dni").value
         
+        if (!dni) {
+            alert("Por favor ingrese los datos solicitados.");
+            throw new Error("Por favor ingrese los datos solicitados")
+        }
+        
         $.ajax({
         url: "/consultaUser",
         method: "GET",
