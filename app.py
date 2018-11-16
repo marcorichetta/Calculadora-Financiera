@@ -91,19 +91,35 @@ def obtenerTasa():
     # Consulta ajax para obtener la tasa en el calculo del plazo fijo
     dias = int(request.args.get("plazo"))
     
-    result = db.execute("SELECT tasa FROM tasasPF WHERE dias > :dias",
+    result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :dias",
                     dias = dias)
     
-    if len(result) == 0:
+    print(result)
+
+    if len(result) == 0: # Si el plazo es mayor a 120 días
         tasa = 45
     else:
         tasa = result[0]['tasa']
+
+    print(tasa)
 
     return jsonify(tasa)
 
 # Consultar tasas para préstamo
 # Ver GET para obtener y POST para UPDATE en DB.
 @app.route("/obtenerTasaPrestamo")
+def obtenerTasaPrestamo():
+
+    # Consulta ajax para obtener la tasa en el calculo del préstamo
+    meses = int(request.args.get("plazo"))
+
+    result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :meses",
+                        meses = meses)
+    
+    # Guardo el primer resultado
+    tasa = result[0]['tasa']
+    print(tasa)
+    return jsonify(tasa)
 
 @app.route("/consultaUser")
 def consultaUser():
