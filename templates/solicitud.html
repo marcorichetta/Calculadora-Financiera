@@ -1,16 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container pad">
-    <h3>Usted va a depositar $ {{valor[0]}} por {{valor[1]}} días a una tasa nominal anual del {{valor[2]}}%</h3>
-    <p>Para finalizar la solicitud ingrese los datos del cliente.</p>
+    <h3>Se van a depositar 
+        <span class="importante">$ {{valor[0]}}</span> por 
+        <span class="importante">{{valor[1]}}</span> días a una tasa nominal anual del 
+        <span class="importante">{{valor[2]}}%</span>
+    </h3>
+    <div class="dropdown-divider"></div>
+    <h5>Para finalizar la solicitud ingrese el DNI del cliente.</h5>
     <form action="/solicitud" method="POST" class="centrado">
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
                 <label for="dni">DNI</label>
-                <input type="text" class="form-control" id="dni" name="dni" placeholder="Juan" required>
+                <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                <br>
                 <button type="button" class="btn btn-primary" onclick="consultaUsuario()">Consultar</button>
             </div>
         </div>
+        <div class="dropdown-divider"></div>
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
                 <label for="nombre">Nombre</label>
@@ -43,7 +50,7 @@
         </div>
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
-                <button type="submit" id="enviarPlazo" class="btn btn-success">✔︎ Solicitar</button>
+                <button type="submit" id="enviarPlazo" class="btn btn-success">✔︎ Finalizar solicitud</button>
                 <input action="action" onclick="window.history.go(-1); return false;" type="button" value="← Atrás" class="btn btn-secondary"></input>
             </div>
         </div>
@@ -57,7 +64,7 @@
             alert("Por favor ingrese los datos solicitados.");
             throw new Error("Por favor ingrese los datos solicitados")
         }
-        
+
         $.ajax({
         url: "/consultaUser",
         method: "GET",

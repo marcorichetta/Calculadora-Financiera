@@ -45,10 +45,9 @@ def solicitud():
                                 plazo=plazo,
                                 tasa=tasa)
 
-        print(session)
-        # Check para no agregar dos usuarios iguales 
+        # Check para evitar insert de usuario existente
         if not('existe' in session):
-            print('NO EXISTE!')
+            print('Insertando...')
             # Inserto los datos del cliente
             db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
                     dni=dni,
@@ -78,14 +77,13 @@ def solicitud():
             tasa = 47
         else:
             tasa = 45
-            
+        
         valor = [capital, plazo, tasa]
 
+        # Guardo variables para usarlas después en el POST del formulario.
         session['valor'] = valor
 
         return render_template("solicitud.html", valor=valor)
-
-    
 
 @app.route("/obtenerTasa")
 def obtenerTasa():
@@ -93,14 +91,19 @@ def obtenerTasa():
     # Consulta ajax para obtener la tasa en el calculo del plazo fijo
     dias = int(request.args.get("plazo"))
     
-    if (dias < 45):
-        tasa = 48
-    elif (dias < 60):
-        tasa = 47
-    else:
+    result = db.execute("SELECT tasa FROM tasasPF WHERE dias > :dias",
+                    dias = dias)
+    
+    if len(result) == 0:
         tasa = 45
+    else:
+        tasa = result[0]['tasa']
 
     return jsonify(tasa)
+
+# Consultar tasas para préstamo
+# Ver GET para obtener y POST para UPDATE en DB.
+@app.route("/obtenerTasaPrestamo")
 
 @app.route("/consultaUser")
 def consultaUser():
@@ -112,8 +115,8 @@ def consultaUser():
     usuario = db.execute("SELECT * FROM clientes WHERE dni = :dni",
                         dni = dni)
 
-    if len(usuario) == 0:
+    if len(usuario) == 0: # Ningun usuario encontrado
         return 'no'
     else:
-        session['existe'] = 1
+        session['existe'] = 1 # Flag para existencia del usuario
         return jsonify(usuario)

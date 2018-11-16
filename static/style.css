@@ -11,14 +11,14 @@ body{
 	font-family: 'open_sansregular', sans-serif;
 	font-size: 16px;
 }
-h3{
+h3, h5{
 	text-align: center;
 }
 .calculos {
 	color: cornflowerblue;
 } /* Color de los cálculos */
 .importante {
-	font-weight: bold;
+	font-weight: normal;
 	color: green;
 } /* Color para números importantes */
 .custom-nav{
