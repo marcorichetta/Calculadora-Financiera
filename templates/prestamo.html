@@ -5,14 +5,14 @@
         <div class="col-md-4">
             <h3>Solicitá tu préstamo</h3>
             <p>Ingresá los datos y presioná calcular para obtener los resultados.</p>
-            <form>
+            <form action="/solicitudPrestamo" method="GET">
                 <div class="form-group">
                     <label for="capitalLabel">Capital</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">$</div>
                         </div>
-                        <input type="number" class="form-control" id="capital" aria-describedby="capitalHelp" max="100000" min="5000"
+                        <input type="number" class="form-control" id="capital" name="capital" aria-describedby="capitalHelp" max="100000" min="5000"
                         step="5000" placeholder="5000">
                     </div>
                     <small id="capitalHelp" class="form-text text-muted">Máximo $100000</small>
@@ -20,19 +20,20 @@
 
                 <div class="form-group">
                     <label for="plazoLabel">Duración del préstamo (en meses)</label>
-                    <input type="number" class="form-control" id="plazo" aria-describedby="plazoHelp" max="72" min="1" placeholder="12">
+                    <input type="number" class="form-control" id="plazo" name="plazo" aria-describedby="plazoHelp" max="72" min="1" placeholder="12">
                     <small id="plazoHelp" class="form-text text-muted">Máximo 72 meses</small>
                 </div>
 
                 <div class="form-group">
                     <label for="sistemaLabel">Sistema de amortización</label>
-                    <select class="form-control" id="sistema">
+                    <select class="form-control" id="sistema" name="sistema">
                         <option value="1">Francés</option>
                         <option value="2">Alemán</option>
                     </select>
                     </div>
 
                 <button onclick="calcularAmort()" id="Calcular" type="button" class="btn btn-primary">Calcular</button>
+                <button type="submit" id="solicitudPrestamo" class="btn btn-success">Solicitar</button>
             </form>
         </div><!-- Columna izquierda -->
 

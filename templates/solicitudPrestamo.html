@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container pad">
+    <h3>Se van a solicitar 
+        <span class="importante">$ {{prestamo[0]}}</span> por 
+        <span class="importante">{{prestamo[1]}}</span> días a una tasa nominal anual del 
+        <span class="importante">{{prestamo[2]}}%</span>.
+    </h3>
+    <h3>Se pagará mediante sistema de amortización 
+        {% if prestamo[3] == '1' %}
+        <span class="importante">Francés</span>
+        {% else %}
+        <span class="importante">Alemán</span>
+        {% endif %}.
+    </h3>
+    <div class="dropdown-divider"></div>
+    <h5>Para finalizar la solicitud ingrese el DNI del cliente.</h5>
+    <form action="/solicitudPrestamo" method="POST" class="centrado">
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="dni">DNI</label>
+                <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                <br>
+                <button type="button" class="btn btn-primary" onclick="consultaUsuario()">Consultar</button>
+            </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Juan" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Perez" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="direccion">Localidad</label>
+                <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Localidad" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="telefono">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="0353 1 234 567" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="juanperez@hotmail.com" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="col-6 centrado-form">
+                <button type="submit" id="enviarPrestamo" class="btn btn-success">✔︎ Finalizar solicitud</button>
+                <input action="action" onclick="window.history.go(-1); return false;" type="button" value="← Atrás" class="btn btn-secondary"></input>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function consultaUsuario() {
+        let dni = document.getElementById("dni").value
+        
+        if (!dni) {
+            alert("Por favor ingrese los datos solicitados.");
+            throw new Error("Por favor ingrese los datos solicitados")
+        }
+
+        $.ajax({
+        url: "/consultaUser",
+        method: "GET",
+        async: false,
+        data: {
+            dni: dni
+        }
+        }) 
+        .done(function(usuario) {
+            if (usuario == 'no') {
+                alert('El usuario no está registrado. Por favor ingrese los datos.');                
+            } else {
+                document.getElementById('nombre').value = usuario[0]['nombre']
+                document.getElementById('apellido').value = usuario[0]['apellido']
+                document.getElementById('localidad').value = usuario[0]['localidad']
+                document.getElementById('telefono').value = usuario[0]['telefono']
+                document.getElementById('email').value = usuario[0]['email']
+            }
+
+        });
+    }
+</script>
+{% endblock %}

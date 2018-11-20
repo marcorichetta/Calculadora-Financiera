@@ -13,16 +13,19 @@ def index():
 
 @app.route("/plazo", methods=['GET', 'POST'])
 def plazo():
-    """Solicitar un plazo fijo"""
+    """Calcular un plazo fijo"""
     
     return render_template("plazo.html")
 
 @app.route("/prestamo")
 def prestamo():
+    """Calcular un préstamo"""
+
     return render_template("prestamo.html")
 
 @app.route("/solicitud", methods=['GET', 'POST'])
 def solicitud():
+    """Solicitar un Plazo Fijo"""
 
     if request.method == "POST":
         dni = request.form.get("dni")
@@ -38,12 +41,74 @@ def solicitud():
         plazo = session['valor'][1]
         tasa = session['valor'][2]
 
+        # Check para evitar insert de usuario existente
+        if not('existe' in session):
+            print('Insertando...')
+            # Inserto los datos del cliente
+            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
+                    dni=dni,
+                    nombre=nombre,
+                    apellido=apellido,
+                    localidad=localidad,
+                    telefono=telefono,
+                    email=email)
+
         # Tabla plazos tiene id autoincremental
         db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) VALUES (:dni, :capital, :plazo, :tasa)",
                                 dni=dni,
                                 capital=capital,
                                 plazo=plazo,
                                 tasa=tasa)
+
+        # Sacamos los valores para el próximo cliente
+        session.pop('valor', None)
+        session.pop('existe', None)
+
+        flash('¡El plazo fijo fue depositado con éxito!')        
+
+        return redirect("/")
+    else:
+
+        # Tomo las variables de la url
+        capital = request.args.get("capital")
+        plazo = int(request.args.get("plazo"))
+        
+        # Calculo la tasa para pasarle al template de la solicitud
+        result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :plazo",
+                plazo = plazo)
+    
+        print(result)
+
+        if len(result) == 0: # Si el plazo es mayor a 120 días
+            tasa = 45
+        else:
+            tasa = result[0]['tasa']
+        
+        valor = [capital, plazo, tasa]
+
+        # Guardo variables para usarlas después en el POST del formulario.
+        session['valor'] = valor
+
+        return render_template("solicitud.html", valor=valor)
+
+@app.route("/solicitudPrestamo", methods=['GET', 'POST'])
+def solicitudPrestamo():
+    """Solicitar un Préstamo"""
+
+    if request.method == "POST":
+        dni = request.form.get("dni")
+        nombre = request.form.get("nombre")
+        apellido = request.form.get("apellido")
+        localidad = request.form.get("localidad")
+        telefono = request.form.get("telefono")
+        email = request.form.get("email")
+
+        # Accedo al valor del plazo fijo con session
+        # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
+        capital = session['prestamo'][0]
+        plazo = session['prestamo'][1]
+        tasa = session['prestamo'][2]
+        sistema = session['prestamo'][3]
 
         # Check para evitar insert de usuario existente
         if not('existe' in session):
@@ -57,33 +122,43 @@ def solicitud():
                     telefono=telefono,
                     email=email)
 
+        # Tabla prestamos tiene id autoincremental
+        db.execute("INSERT INTO prestamos (dnicliente, capital, plazo, tasa, sistema) VALUES (:dni, :capital, :plazo, :tasa, :sistema)",
+                    dni = dni,
+                    capital = capital,
+                    plazo = plazo,
+                    tasa = tasa,
+                    sistema = sistema)
+
         # Sacamos los valores para el próximo cliente
-        session.pop('valor', None)
+        session.pop('prestamo', None)
         session.pop('existe', None)
 
-        flash('El plazo fijo fue depositado con éxito')        
+        flash('¡El préstamo fue solicitado con éxito!')
 
         return redirect("/")
     else:
-
-        # Tomo las variables de la url
+        
+        # Tomo variables de la url
         capital = request.args.get("capital")
         plazo = int(request.args.get("plazo"))
-        
-        # Calculo tasa para pasarle al template de la solicitud
-        if (plazo < 45):
-            tasa = 48
-        elif (plazo < 60):
-            tasa = 47
+        sistema = request.args.get("sistema")
+
+        result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :plazo", 
+                            plazo = plazo)
+
+        print(result)
+
+        if len(result) == 0:
+            tasa = 75
         else:
-            tasa = 45
+            tasa = result[0]['tasa']
         
-        valor = [capital, plazo, tasa]
+        prestamo = [capital, plazo, tasa, sistema]
 
-        # Guardo variables para usarlas después en el POST del formulario.
-        session['valor'] = valor
+        session['prestamo'] = prestamo
 
-        return render_template("solicitud.html", valor=valor)
+        return render_template("solicitudPrestamo.html", prestamo=prestamo)
 
 @app.route("/obtenerTasa")
 def obtenerTasa():
