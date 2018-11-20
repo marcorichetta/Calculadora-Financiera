@@ -76,13 +76,9 @@ def solicitud():
         # Calculo la tasa para pasarle al template de la solicitud
         result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :plazo",
                 plazo = plazo)
-    
-        print(result)
 
-        if len(result) == 0: # Si el plazo es mayor a 120 días
-            tasa = 45
-        else:
-            tasa = result[0]['tasa']
+        # Guardo el primer resultado
+        tasa = result[0]['tasa']
         
         valor = [capital, plazo, tasa]
 
@@ -147,15 +143,12 @@ def solicitudPrestamo():
         result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :plazo", 
                             plazo = plazo)
 
-        print(result)
+        # Guardo el primer resultado
+        tasa = result[0]['tasa']
 
-        if len(result) == 0:
-            tasa = 75
-        else:
-            tasa = result[0]['tasa']
-        
         prestamo = [capital, plazo, tasa, sistema]
 
+        # Guardo los datos del prestamo en una session para usar en el POST
         session['prestamo'] = prestamo
 
         return render_template("solicitudPrestamo.html", prestamo=prestamo)
@@ -168,15 +161,9 @@ def obtenerTasa():
     
     result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :dias",
                     dias = dias)
-    
-    print(result)
 
-    if len(result) == 0: # Si el plazo es mayor a 120 días
-        tasa = 45
-    else:
-        tasa = result[0]['tasa']
-
-    print(tasa)
+    # Guardo el primer resultado    
+    tasa = result[0]['tasa']
 
     return jsonify(tasa)
 
@@ -190,10 +177,10 @@ def obtenerTasaPrestamo():
 
     result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :meses",
                         meses = meses)
-    
+
     # Guardo el primer resultado
     tasa = result[0]['tasa']
-    print(tasa)
+    
     return jsonify(tasa)
 
 @app.route("/consultaUser")
