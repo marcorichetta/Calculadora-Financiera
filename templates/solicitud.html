@@ -8,7 +8,7 @@
     </h3>
     <div class="dropdown-divider"></div>
     <h5>Para finalizar la solicitud ingrese el DNI del cliente.</h5>
-    <form action="/solicitud" method="POST" class="centrado">
+    <form action="/solicitud" method="POST" class="centrado" id="formulario">
         <div class="form-row justify-content-center">
             <div class="col-6 centrado-form">
                 <label for="dni">DNI</label>
@@ -59,7 +59,9 @@
 <script type="text/javascript">
     function consultaUsuario() {
         let dni = document.getElementById("dni").value
-        
+        let form = document.getElementById("formulario");
+        let inputs = form.elements;
+
         if (!dni) {
             alert("Por favor ingrese los datos solicitados.");
             throw new Error("Por favor ingrese los datos solicitados")
@@ -75,15 +77,24 @@
         }) 
         .done(function(usuario) {
             if (usuario == 'no') {
-                alert('El usuario no está registrado. Por favor ingrese los datos.');                
+                alert('El usuario no está registrado. Por favor ingrese los datos.');
+
+                for (let i = 2; i < 7; i++) {
+                    inputs[i].readOnly = false;
+                    inputs[i].value = inputs[i].defaultValue;
+                }
+
             } else {
                 document.getElementById('nombre').value = usuario[0]['nombre']
                 document.getElementById('apellido').value = usuario[0]['apellido']
                 document.getElementById('localidad').value = usuario[0]['localidad']
                 document.getElementById('telefono').value = usuario[0]['telefono']
                 document.getElementById('email').value = usuario[0]['email']
-            }
 
+                for (let i = 2; i < 7; i++) {
+                    inputs[i].readOnly = true;
+                }
+            }
         });
     }
 </script>
