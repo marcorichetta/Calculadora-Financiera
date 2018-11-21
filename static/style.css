@@ -14,6 +14,9 @@ body{
 h3, h5{
 	text-align: center;
 }
+#admin {
+	flex-direction: row-reverse;
+}
 .calculos {
 	color: cornflowerblue;
 } /* Color de los cálculos */

@@ -1,15 +1,17 @@
 from cs50 import SQL
 from flask import Flask, flash, render_template, request, jsonify, redirect, session, escape
-from flask_basicauth import BasicAuth
+#from flask_basicauth import BasicAuth
+
+from helpers import check_auth, authenticate, requires_auth
 
 app = Flask(__name__)
 
 app.secret_key = 'testing'
 
 app.config['BASIC_AUTH_USERNAME'] = 'root'
-app.config['BASIC_AUTH_PASSWORD'] = '123456'
+app.config['BASIC_AUTH_PASSWORD'] = '1234'
 
-basic_auth = BasicAuth(app)
+#basic_auth = BasicAuth(app)
 
 db = SQL("sqlite:///prueba.db")
 
@@ -30,10 +32,19 @@ def prestamo():
     return render_template("prestamo.html")
 
 @app.route("/admin")
-@basic_auth.required
+@requires_auth
 def admin():
     
+    session["admin"] = 1
+
     return render_template("admin.html")
+
+@app.route("/logout")
+def logout():
+
+    session.pop("admin", None)
+    
+    return redirect("/")
 
 @app.route("/solicitud", methods=['GET', 'POST'])
 def solicitud():
