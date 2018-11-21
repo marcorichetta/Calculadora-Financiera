@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container pad">
+    <div class="row">
+        <div class="col-md-3">
+            <p>Aquí podrá ver las solicitudes de cada cliente.</p>
+            <form action="/consulta" method="GET">
+                <div class="form-group">
+                    <label for="clienteLabel">Cliente</label>
+                    <select class="form-control" id="cliente" name="cliente" required>
+                        {% for cliente in clientes %}
+                        <option onclick="selectCliente()" value={{ cliente.dni }}>{{ cliente.nombre + ' ' + cliente.apellido }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div><!-- Columna izquierda -->
+
+        <div class="col-md-9">
+                <div class="right-area">
+                    <h3 class="alert alert-success">Prestamos</h3>
+                    <div class="row tablePad">
+                            <table id="tablaAmortizacion" class="table table-hover table-striped">
+                                <thead>
+                                    <tr class="table-success">
+                                        <th scope="col">Capital</th>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Plazo (meses)</th>
+                                        <th scope="col">Sistema</th>
+                                        <th scope="col">Tasa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cuerpoTablaPrest">
+                                </tbody>
+                            </table>
+                        </div><!-- Tabla -->
+                        <h3 class="alert alert-primary">Plazos Fijos</h3>
+                        <div class="row tablePad">
+                            <table id="tablaPlazosFijos" class="table table-hover table-striped">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th scope="col">Capital</th>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Plazo (días)</th>
+                                        <th scope="col">Tasa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cuerpoTablaPF">
+                                </tbody>
+                            </table>
+                        </div><!-- Tabla -->
+                </div><!-- Right-area -->
+        </div><!-- Columna derecha -->
+    </div>
+</div>
+<script type="text/javascript">
+    function selectCliente() {
+        let cliente = document.getElementById("cliente").value;
+
+        /**
+         * https://stackoverflow.com/questions/22988250/two-ajax-requests-on-same-event-at-same-time-what-should-be-the-typical-behavi
+         */
+        $.when(
+            $.ajax({
+                url: "/consultaPrestamos",
+                method: "GET",
+                async: false,
+                data: {
+                    cliente: cliente
+                },
+                // Guardo el resultado en una variable
+                success: function(resultado1) {
+                    prestamos = resultado1;
+                }
+            }),
+            
+            $.ajax({
+                url: "/consultaPlazos",
+                method: "GET",
+                async: false,
+                data: {
+                    cliente: cliente
+                },
+                // Guardo el resultado en una variable                
+                success: function(resultado2) {
+                    plazos = resultado2;
+                }
+            })
+            
+        ).then(function() {
+
+                // Lleno la tabla con los préstamos obtenidos
+                let tableBody = document.getElementById("cuerpoTablaPrest");
+                tableBody.innerHTML = "";
+
+                for (let i = 0; i < prestamos.length; i++) {
+                    const prestamo = prestamos[i]
+                    fila = document.createElement("tr");
+                    /**
+                     * https://stackoverflow.com/questions/14379274/how-to-iterate-over-a-javascript-object
+                     */
+                    for (let key in prestamo) { 
+                        if (prestamo.hasOwnProperty(key)) { 
+                            let valor = prestamo[key]
+                            
+                            // Workaround para mostrar sistema
+                            if (key == 'sistema') {
+                                if (prestamo[key] == 1) {
+                                    valor = 'Francés'
+                                } else {
+                                    valor = 'Alemán'
+                                }
+                            }
+
+                            td = document.createElement("td");
+                            celda = document.createTextNode(valor);
+                            td.appendChild(celda);
+                            fila.appendChild(td);
+                        } 
+                    }
+                    tableBody.appendChild(fila);
+                }
+
+                // Lleno la tabla con los plazos fijos obtenidos
+                let tablaPF = document.getElementById("cuerpoTablaPF");
+                tablaPF.innerHTML = "";
+
+                for (let i = 0; i < plazos.length; i++) {
+                    const plazo = plazos[i]
+                    fila = document.createElement("tr");
+                    /**
+                     * https://stackoverflow.com/questions/14379274/how-to-iterate-over-a-javascript-object
+                     */
+                    for (let key in plazo) { 
+                        if (plazo.hasOwnProperty(key)) { 
+                            let valor = plazo[key]
+                            
+                            td = document.createElement("td");
+                            celda = document.createTextNode(valor);
+                            td.appendChild(celda);
+                            fila.appendChild(td);
+                        } 
+                    }
+                    tablaPF.appendChild(fila);
+                }
+            })
+    }
+</script>
+{% endblock %}

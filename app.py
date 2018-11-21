@@ -1,17 +1,9 @@
 from cs50 import SQL
 from flask import Flask, flash, render_template, request, jsonify, redirect, session, escape
-#from flask_basicauth import BasicAuth
-
-from helpers import check_auth, authenticate, requires_auth
 
 app = Flask(__name__)
 
 app.secret_key = 'testing'
-
-app.config['BASIC_AUTH_USERNAME'] = 'root'
-app.config['BASIC_AUTH_PASSWORD'] = '1234'
-
-#basic_auth = BasicAuth(app)
 
 db = SQL("sqlite:///prueba.db")
 
@@ -31,20 +23,37 @@ def prestamo():
 
     return render_template("prestamo.html")
 
-@app.route("/admin")
-@requires_auth
-def admin():
+@app.route("/solicitudes")
+def solicitudes():
+
+    clientes = db.execute("SELECT dni, nombre, apellido FROM clientes")
+
+    print(clientes, type(clientes))
     
-    session["admin"] = 1
+    return render_template("solicitudes.html", clientes = clientes)
 
-    return render_template("admin.html")
+@app.route("/consultaPrestamos")
+def consulta():
 
-@app.route("/logout")
-def logout():
+    # Consulta ajax para verificar existencia del usuario
+    dni = request.args.get("cliente")
 
-    session.pop("admin", None)
-    
-    return redirect("/")
+    # Guardo los prestamos
+    prestamos = db.execute("SELECT capital, plazo, tasa, sistema, fechaSolicitud FROM prestamos WHERE dnicliente = :dni",
+                        dni = dni)
+
+    return jsonify(prestamos)
+
+@app.route("/consultaPlazos")
+def consultaPlazos():
+
+    # Consulta ajax para verificar existencia del usuario
+    dni = request.args.get("cliente")
+
+    plazos = db.execute("SELECT capital, plazo, tasa, fechaSolicitud FROM plazos WHERE dnicliente = :dni",
+                        dni = dni)
+
+    return jsonify(plazos)
 
 @app.route("/solicitud", methods=['GET', 'POST'])
 def solicitud():

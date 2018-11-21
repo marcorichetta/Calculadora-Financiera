@@ -14,9 +14,6 @@ body{
 h3, h5{
 	text-align: center;
 }
-#admin {
-	flex-direction: row-reverse;
-}
 .calculos {
 	color: cornflowerblue;
 } /* Color de los cálculos */
@@ -56,6 +53,9 @@ header{
 }
 .pad{
 	padding:40px 0px;
+}
+.tablePad {
+	padding: 30px 10px;
 }
 .right-area{
 	border-left: 1px dotted #2e2e2e;
