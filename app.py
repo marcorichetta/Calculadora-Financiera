@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, render_template, request, jsonify, redirect, session, escape
+from flask import Flask, flash, render_template, request, jsonify, redirect, session
 
 app = Flask(__name__)
 

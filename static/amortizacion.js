@@ -81,6 +81,9 @@ function calcularAmort() {
     document.getElementById("TNA").innerText = tasaNominal.toFixed(2) + ' %';
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
 
+    // Actualizamos caption de la tabla.
+    document.getElementById("descripcion").innerText = 'Para imprimir esta solicitud buscar la opción\
+    según el navegador utilizado'
 
     let tableBody = document.getElementById("cuerpoTabla");
     tableBody.innerHTML = "";
@@ -172,8 +175,6 @@ function amortFrances(cuotaFija, plazo, monto, tasa) {
         items.push(item);
     }
 
-    // Actualizamos caption de la tabla.
-    document.getElementById("descripcion").innerText = 'Sistema Francés'
     return items;
 }
 
@@ -200,8 +201,5 @@ function amortAleman(plazo, monto, tasa) {
 
         items.push(item);
     }
-
-    // Actualizamos caption de la tabla.
-    document.getElementById("descripcion").innerText = 'Sistema Alemán'
     return items;
 }
