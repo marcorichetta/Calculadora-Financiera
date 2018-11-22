@@ -106,7 +106,7 @@ def solicitud():
         session.pop('valor', None)
         session.pop('existe', None)
 
-        flash('¡El plazo fijo fue depositado con éxito!')        
+        flash('¡La solicitud de plazo fijo fue enviada con éxito!')        
 
         return redirect("/")
     else:
@@ -238,6 +238,7 @@ def consultaUser():
                         dni = dni)
 
     if len(usuario) == 0: # Ningun usuario encontrado
+        session.pop('existe', None) # Saco el usuario que se cargó anteriormente
         return 'no'
     else:
         session['existe'] = 1 # Flag para existencia del usuario
