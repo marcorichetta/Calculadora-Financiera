@@ -2,7 +2,7 @@
 Calculadora financiera para plazos fijos y préstamos.
 Permite guardar usuarios y relacionarlos con los préstamos o plazos fijos solicitados.
 
-## :floppy_disk: Instalación
+## :gear: Instalación
 
 ```bash
 # clonar el repositorio
@@ -19,7 +19,7 @@ $ source mivirtualenv/bin/activate (Linux)
 # Instalar las dependencias
 $ pip install -r requirements.txt
 ```
-## :database: Base de Datos
+## :floppy_disk: Base de Datos
 El sistema fue hecho con una base de datos sqlite3.
 ```
 # Para generar la base de datos
