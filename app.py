@@ -42,7 +42,7 @@ def consulta():
     # Formato de fecha -> https://www.tutorialspoint.com/sqlite/sqlite_date_time.htm
     
     prestamos = db.execute("SELECT capital, plazo, tasa, sistema, \
-                            strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud) as fechaSolicitud \
+                            strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud, 'localtime') as fechaSolicitud \
                             FROM prestamos \
                             WHERE dnicliente = :dni",
                             dni = dni)
@@ -56,7 +56,7 @@ def consultaPlazos():
     dni = request.args.get("cliente")
 
     plazos = db.execute("SELECT capital, plazo, tasa, \
-                        strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud) as fechaSolicitud \
+                        strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud, 'localtime') as fechaSolicitud \
                         FROM plazos \
                         WHERE dnicliente = :dni",
                         dni = dni)
