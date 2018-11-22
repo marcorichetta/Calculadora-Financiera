@@ -55,7 +55,8 @@ function calcularAmort() {
     /* let iva = (cuota * 21)/100;
     let sumaTotal = cuota + iva; */
 
-    let ingresosNecesarios = cuota * 6.66;
+    // 
+    let ingresosNecesarios = cuota * 3.67;
 
     // Calculo la fecha actual y le sumo un mes para el próximo pago.
     let fechaActual = new Date();
@@ -82,8 +83,8 @@ function calcularAmort() {
     document.getElementById("TEM").innerText = tasaEfectiva.toFixed(2) + ' %';
 
     // Actualizamos caption de la tabla.
-    document.getElementById("descripcion").innerText = 'Para imprimir esta solicitud buscar la opción\
-    según el navegador utilizado'
+    document.getElementById("descripcion").innerText = "Para imprimir esta solicitud busque la opción\
+    'Imprimir' en la configuración del navegador."
 
     let tableBody = document.getElementById("cuerpoTabla");
     tableBody.innerHTML = "";

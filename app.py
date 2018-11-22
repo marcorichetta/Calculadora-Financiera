@@ -39,8 +39,13 @@ def consulta():
     dni = request.args.get("cliente")
 
     # Guardo los prestamos
-    prestamos = db.execute("SELECT capital, plazo, tasa, sistema, fechaSolicitud FROM prestamos WHERE dnicliente = :dni",
-                        dni = dni)
+    # Formato de fecha -> https://www.tutorialspoint.com/sqlite/sqlite_date_time.htm
+    
+    prestamos = db.execute("SELECT capital, plazo, tasa, sistema, \
+                            strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud) as fechaSolicitud \
+                            FROM prestamos \
+                            WHERE dnicliente = :dni",
+                            dni = dni)
 
     return jsonify(prestamos)
 
@@ -50,7 +55,10 @@ def consultaPlazos():
     # Consulta ajax para verificar existencia del usuario
     dni = request.args.get("cliente")
 
-    plazos = db.execute("SELECT capital, plazo, tasa, fechaSolicitud FROM plazos WHERE dnicliente = :dni",
+    plazos = db.execute("SELECT capital, plazo, tasa, \
+                        strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud) as fechaSolicitud \
+                        FROM plazos \
+                        WHERE dnicliente = :dni",
                         dni = dni)
 
     return jsonify(plazos)
@@ -77,20 +85,22 @@ def solicitud():
         if not('existe' in session):
             print('Insertando...')
             # Inserto los datos del cliente
-            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
-                    dni=dni,
-                    nombre=nombre,
-                    apellido=apellido,
-                    localidad=localidad,
-                    telefono=telefono,
-                    email=email)
+            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) \
+                        VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
+                        dni=dni,
+                        nombre=nombre,
+                        apellido=apellido,
+                        localidad=localidad,
+                        telefono=telefono,
+                        email=email)
 
         # Tabla plazos tiene id autoincremental
-        db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) VALUES (:dni, :capital, :plazo, :tasa)",
-                                dni=dni,
-                                capital=capital,
-                                plazo=plazo,
-                                tasa=tasa)
+        db.execute("INSERT INTO plazos (dnicliente, capital, plazo, tasa) \
+                    VALUES (:dni, :capital, :plazo, :tasa)",
+                    dni=dni,
+                    capital=capital,
+                    plazo=plazo,
+                    tasa=tasa)
 
         # Sacamos los valores para el próximo cliente
         session.pop('valor', None)
@@ -142,16 +152,18 @@ def solicitudPrestamo():
         if not('existe' in session):
             print('Insertando...')
             # Inserto los datos del cliente
-            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
-                    dni=dni,
-                    nombre=nombre,
-                    apellido=apellido,
-                    localidad=localidad,
-                    telefono=telefono,
-                    email=email)
+            db.execute("INSERT INTO clientes (dni, nombre, apellido, localidad, telefono, email) \
+                        VALUES (:dni, :nombre, :apellido, :localidad, :telefono, :email)",
+                        dni=dni,
+                        nombre=nombre,
+                        apellido=apellido,
+                        localidad=localidad,
+                        telefono=telefono,
+                        email=email)
 
         # Tabla prestamos tiene id autoincremental
-        db.execute("INSERT INTO prestamos (dnicliente, capital, plazo, tasa, sistema) VALUES (:dni, :capital, :plazo, :tasa, :sistema)",
+        db.execute("INSERT INTO prestamos (dnicliente, capital, plazo, tasa, sistema) \
+                    VALUES (:dni, :capital, :plazo, :tasa, :sistema)",
                     dni = dni,
                     capital = capital,
                     plazo = plazo,

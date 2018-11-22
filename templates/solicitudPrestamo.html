@@ -3,15 +3,15 @@
 <div class="container pad">
     <h3>Se van a solicitar 
         <span class="importante">$ {{prestamo[0]}}</span> por 
-        <span class="importante">{{prestamo[1]}}</span> días a una tasa nominal anual del 
+        <span class="importante">{{prestamo[1]}}</span> meses a una tasa nominal anual del 
         <span class="importante">{{prestamo[2]}}%</span>.
     </h3>
     <h3>Se pagará mediante sistema de amortización 
         {% if prestamo[3] == '1' %}
-        <span class="importante">Francés</span>
+        <span class="importante">Francés</span>.
         {% else %}
-        <span class="importante">Alemán</span>
-        {% endif %}.
+        <span class="importante">Alemán</span>.
+        {% endif %}
     </h3>
     <div class="dropdown-divider"></div>
     <h5>Para finalizar la solicitud ingrese el DNI del cliente.</h5>
@@ -84,7 +84,7 @@
         }) 
         .done(function(usuario) {
             if (usuario == 'no') {
-                alert('El usuario no está registrado. Por favor ingrese los datos.');
+                alert('El cliente no está registrado. Por favor ingrese los datos.');
 
                 for (let i = 2; i < 7; i++) {
                     inputs[i].readOnly = false;
@@ -101,6 +101,12 @@
                 for (let i = 2; i < 7; i++) {
                     inputs[i].readOnly = true;
                 }
+
+                alert('El cliente ya está registrado. Puede finalizar la solicitud.');
+
+                // Scroll to the bottom 
+                // https://www.electrictoolbox.com/jquery-scroll-bottom/
+                $('html, body').animate({scrollTop:$(document).height()}, '5000');
             }
         });
     }

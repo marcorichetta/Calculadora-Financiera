@@ -3,7 +3,7 @@
 <div class="container pad">
     <div class="row">
         <div class="col-md-3">
-            <p>Aquí podrá ver las solicitudes de cada cliente.</p>
+            <h5>Aquí puede ver las solicitudes de cada cliente.</h5>
             <form action="/consulta" method="GET">
                 <div class="form-group">
                     <label for="clienteLabel">Cliente</label>
@@ -23,11 +23,11 @@
                             <table id="tablaAmortizacion" class="table table-hover table-striped">
                                 <thead>
                                     <tr class="table-success">
-                                        <th scope="col">Capital</th>
-                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Capital ($)</th>
+                                        <th scope="col">Fecha de solicitud</th>
                                         <th scope="col">Plazo (meses)</th>
                                         <th scope="col">Sistema</th>
-                                        <th scope="col">Tasa</th>
+                                        <th scope="col">TNA (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cuerpoTablaPrest">
@@ -39,10 +39,10 @@
                             <table id="tablaPlazosFijos" class="table table-hover table-striped">
                                 <thead>
                                     <tr class="table-primary">
-                                        <th scope="col">Capital</th>
-                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Capital ($)</th>
+                                        <th scope="col">Fecha de solicitud</th>
                                         <th scope="col">Plazo (días)</th>
-                                        <th scope="col">Tasa</th>
+                                        <th scope="col">TNA (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cuerpoTablaPF">

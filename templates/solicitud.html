@@ -94,6 +94,12 @@
                 for (let i = 2; i < 7; i++) {
                     inputs[i].readOnly = true;
                 }
+
+                alert('El cliente ya está registrado. Puede finalizar la solicitud.');
+
+                // Scroll to the bottom 
+                // https://www.electrictoolbox.com/jquery-scroll-bottom/
+                $('html, body').animate({scrollTop:$(document).height()}, '5000');
             }
         });
     }

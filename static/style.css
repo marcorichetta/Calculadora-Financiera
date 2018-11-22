@@ -14,6 +14,29 @@ body{
 h3, h5{
 	text-align: center;
 }
+header{
+	height: 500px;
+	background-color: rgba(0,0,0,0.3);
+	background-blend-mode: overlay;
+	color:#fff;
+	padding:125px 0px;
+	box-sizing: border-box;
+}
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+	position: relative;
+	min-height: 100%;
+ }
+
+.footer {
+	position: relative;
+	bottom: 0;
+	width: 100%;
+	height: 50px; /* Altura fija del footer */
+	line-height: 50px; /* Altura del contenido del footer */
+	background-color: #2e2e2e
+}
 .calculos {
 	color: cornflowerblue;
 } /* Color de los cálculos */
@@ -38,21 +61,13 @@ h3, h5{
 	text-align: center;
 	padding: 10px 0px;
 }
-header{
-	height: 500px;
-	background-color: rgba(0,0,0,0.3);
-	background-blend-mode: overlay;
-	color:#fff;
-	padding:125px 0px;
-	box-sizing: border-box;
-}
 .banner-title{
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 800;
 	font-size: 70px;
 }
 .pad{
-	padding:40px 0px;
+	padding: 100px 0px;
 }
 .tablePad {
 	padding: 30px 10px;
