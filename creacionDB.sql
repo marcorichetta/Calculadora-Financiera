@@ -7,6 +7,7 @@ CREATE TABLE `plazos` (
         `fechaSolicitud`        DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(`dnicliente`) REFERENCES `clientes`(`dni`)
 );
+
 CREATE TABLE "clientes" (
         `id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `dni`   INTEGER NOT NULL UNIQUE,
@@ -16,11 +17,13 @@ CREATE TABLE "clientes" (
         `telefono`      INTEGER NOT NULL,
         `email` INTEGER NOT NULL
 );
+
 CREATE TABLE "tasasPF" (
         `id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `dias`  INTEGER NOT NULL,
         `tasa`  NUMERIC NOT NULL
 );
+
 -- Insertar 3 tasas Plazo Fijo(id, días, % interés)
 -- TODO - Form ABM
 INSERT INTO tasasPF VALUES(1,60,48);
@@ -32,6 +35,7 @@ CREATE TABLE "tasasPrest" (
         `meses` INTEGER NOT NULL, 
         `tasa` NUMERIC NOT NULL
 );
+
 -- Insertar 3 tasas Préstamo(id, meses, % interés)
 INSERT INTO tasasPrest VALUES(1,24,56);
 INSERT INTO tasasPrest VALUES(2,48,65);
@@ -45,7 +49,8 @@ CREATE TABLE "prestamos" (
         `tasa`  INTEGER NOT NULL,
         `sistema`  INTEGER NOT NULL,
         `fechaSolicitud`        DATETIME DEFAULT CURRENT_TIMESTAMP
-)
+);
+
 DELETE FROM sqlite_sequence;
 -- Actualizar índices de las tablas modificadas
 INSERT INTO sqlite_sequence VALUES('tasasPF',3);
