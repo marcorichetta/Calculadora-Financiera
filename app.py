@@ -4,6 +4,7 @@ from flask import Flask, flash, render_template, request, jsonify, redirect, ses
 app = Flask(__name__)
 
 app.secret_key = 'testing'
+app.debug = True
 
 db = SQL("sqlite:///prueba.db")
 
