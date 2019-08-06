@@ -34,17 +34,17 @@ Por defecto se puede ver la app en la dirección http://127.0.0.1:5000/ en el na
 
 ## :tada: Screenshots
 
-### Home
+## Home
 ![Home](./static/screenshots/Inicio.png)
 
-### Plazo Fijo
+## Plazo Fijo
 ![Plazo Fijo](./static/screenshots/PlazoFijo.png)
 
-### Préstamo
+## Préstamo
 ![Préstamo](./static/screenshots/Prestamo.png)
 
-### Solicitud
+## Solicitud
 ![Solicitud](./static/screenshots/Solicitud.png)
 
-### Listado
+## Listado
 ![Listado](./static/screenshots/Listado.png)
