@@ -28,8 +28,6 @@ def prestamo():
 def solicitudes():
 
     clientes = db.execute("SELECT dni, nombre, apellido FROM clientes")
-
-    print(clientes, type(clientes))
     
     return render_template("solicitudes.html", clientes = clientes)
 
@@ -175,7 +173,7 @@ def solicitudPrestamo():
         session.pop('prestamo', None)
         session.pop('existe', None)
 
-        flash('¡El préstamo fue solicitado con éxito!')
+        flash('¡La solicitud de préstamo fue enviada con éxito!')
 
         return redirect("/")
     else:
