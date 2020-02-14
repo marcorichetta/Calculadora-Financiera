@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'testing'
 app.debug = True
 
-db = SQL("sqlite:///prueba.db")
+db = SQL("postgres://rkxrmcrnyvxrwy:1a639286314b08504efd8290fc73caa0865f57eee66be1b35e65d91b05d4ac54@ec2-52-73-247-67.compute-1.amazonaws.com:5432/dd4chblvrjcpsc")
 
 @app.route("/")
 def index():
@@ -15,7 +15,7 @@ def index():
 @app.route("/plazo", methods=['GET', 'POST'])
 def plazo():
     """Calcular un plazo fijo"""
-    
+
     return render_template("plazo.html")
 
 @app.route("/prestamo")
@@ -28,7 +28,7 @@ def prestamo():
 def solicitudes():
 
     clientes = db.execute("SELECT dni, nombre, apellido FROM clientes")
-    
+
     return render_template("solicitudes.html", clientes = clientes)
 
 @app.route("/consultaPrestamos")
@@ -39,7 +39,7 @@ def consulta():
 
     # Guardo los prestamos
     # Formato de fecha -> https://www.tutorialspoint.com/sqlite/sqlite_date_time.htm
-    
+
     prestamos = db.execute("SELECT capital, plazo, tasa, sistema, \
                             strftime('%d/%m/%Y %H:%M:%S',fechaSolicitud, 'localtime') as fechaSolicitud \
                             FROM prestamos \
@@ -73,7 +73,7 @@ def solicitud():
         localidad = request.form.get("localidad")
         telefono = request.form.get("telefono")
         email = request.form.get("email")
-        
+
         # Accedo al valor del plazo fijo con session
         # Ver más en http://flask.pocoo.org/docs/1.0/quickstart/#sessions
         capital = session['valor'][0]
@@ -105,7 +105,7 @@ def solicitud():
         session.pop('valor', None)
         session.pop('existe', None)
 
-        flash('¡La solicitud de plazo fijo fue enviada con éxito!')        
+        flash('¡La solicitud de plazo fijo fue enviada con éxito!')
 
         return redirect("/")
     else:
@@ -113,14 +113,14 @@ def solicitud():
         # Tomo las variables de la url
         capital = request.args.get("capital")
         plazo = int(request.args.get("plazo"))
-        
+
         # Calculo la tasa para pasarle al template de la solicitud
         result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :plazo",
                 plazo = plazo)
 
         # Guardo el primer resultado
         tasa = result[0]['tasa']
-        
+
         valor = [capital, plazo, tasa]
 
         # Guardo variables para usarlas después en el POST del formulario.
@@ -177,13 +177,13 @@ def solicitudPrestamo():
 
         return redirect("/")
     else:
-        
+
         # Tomo variables de la url
         capital = request.args.get("capital")
         plazo = int(request.args.get("plazo"))
         sistema = request.args.get("sistema")
 
-        result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :plazo", 
+        result = db.execute("SELECT tasa FROM tasasPrest WHERE meses >= :plazo",
                             plazo = plazo)
 
         # Guardo el primer resultado
@@ -198,14 +198,14 @@ def solicitudPrestamo():
 
 @app.route("/obtenerTasa")
 def obtenerTasa():
-    
+
     # Consulta ajax para obtener la tasa en el calculo del plazo fijo
     dias = int(request.args.get("plazo"))
-    
+
     result = db.execute("SELECT tasa FROM tasasPF WHERE dias >= :dias",
                     dias = dias)
 
-    # Guardo el primer resultado    
+    # Guardo el primer resultado
     tasa = result[0]['tasa']
 
     return jsonify(tasa)
@@ -223,7 +223,7 @@ def obtenerTasaPrestamo():
 
     # Guardo el primer resultado
     tasa = result[0]['tasa']
-    
+
     return jsonify(tasa)
 
 @app.route("/consultaUser")
